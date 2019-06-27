@@ -61,6 +61,7 @@ public class DubboSample extends AbstractSampler {
     public static String FIELD_DUBBO_CLUSTER = "FIELD_DUBBO_CLUSTER";
     public static String FIELD_DUBBO_GROUP = "FIELD_DUBBO_GROUP";
     public static String FIELD_DUBBO_CONNECTIONS = "FIELD_DUBBO_CONNECTIONS";
+    public static String FIELD_DUBBO_ROUTER_GROUP = "FIELD_DUBBO_ROUTER_GROUP";
     public static String FIELD_DUBBO_LOADBALANCE = "FIELD_DUBBO_LOADBALANCE";
     public static String FIELD_DUBBO_ASYNC = "FIELD_DUBBO_ASYNC";
     public static String FIELD_DUBBO_INTERFACE = "FIELD_DUBBO_INTERFACE";
@@ -72,6 +73,7 @@ public class DubboSample extends AbstractSampler {
     public static String DEFAULT_RETRIES = "0";
     public static String DEFAULT_CLUSTER = "failfast";
     public static String DEFAULT_CONNECTIONS = "100";
+    public static String DEFAULT_ROUTER_GROUP = "127.0.0.1:20880";
     public static ApplicationConfig application = new ApplicationConfig("DubboSample");
 
     /**
@@ -233,7 +235,15 @@ public class DubboSample extends AbstractSampler {
     public void setConnections(String connections) {
     	this.setProperty(new StringProperty(FIELD_DUBBO_CONNECTIONS, org.springframework.util.StringUtils.trimAllWhitespace(connections)));
     }
-    
+
+    public String getRouterGroup() {
+        return this.getPropertyAsString(FIELD_DUBBO_ROUTER_GROUP, DEFAULT_ROUTER_GROUP);
+    }
+
+    public void setRouterGroup(String routerGroup) {
+        this.setProperty(new StringProperty(FIELD_DUBBO_ROUTER_GROUP, org.springframework.util.StringUtils.trimAllWhitespace(routerGroup)));
+    }
+
     /**
      * get loadbalance
      * @return the loadbalance
@@ -494,6 +504,11 @@ public class DubboSample extends AbstractSampler {
             }
             if (connections != null) {
                 reference.setConnections(connections);
+            }
+
+            String url = getRouterGroup();
+            if (!StringUtils.isBlank(url)) {
+                reference.setUrl(url);
             }
 
             // set loadBalance

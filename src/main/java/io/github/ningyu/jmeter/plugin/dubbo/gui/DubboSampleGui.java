@@ -68,6 +68,7 @@ public class DubboSampleGui extends AbstractSamplerGui {
     private JTextField methodText;
     private JTextField groupText;
     private JTextField connectionsText;
+    private JTextField routerGroupText;
     private JComboBox<String> loadbalanceText;
     private JComboBox<String> asyncText;
     private DefaultTableModel model;
@@ -237,7 +238,16 @@ public class DubboSampleGui extends AbstractSamplerGui {
         h.add(connectionsText);
         h.add(makeHelper("The maximum connections of every provider. For short connection such as rmi, http and hessian, it's connection limit, but for long connection such as dubbo, it's connection count."));
         consumerSettings.add(h);
-        
+
+        JLabel routerGroupLabel = new JLabel("RemoteRouter:", SwingConstants.RIGHT);
+        routerGroupText = new JTextField(textColumns);
+        routerGroupText.setText(DubboSample.DEFAULT_ROUTER_GROUP);
+        routerGroupLabel.setLabelFor(routerGroupText);
+        h.add(routerGroupLabel);
+        h.add(routerGroupText);
+        h.add(makeHelper("The reference for dubbo server address"));
+        consumerSettings.add(h);
+
         JPanel hp1 = new HorizontalPanel();
         //Async
         JLabel asyncLable = new JLabel("     Async:", SwingConstants.RIGHT);
@@ -350,6 +360,7 @@ public class DubboSampleGui extends AbstractSamplerGui {
         retriesText.setText(sample.getRetries());
         groupText.setText(sample.getGroup());
         connectionsText.setText(sample.getConnections());
+        routerGroupText.setText(sample.getRouterGroup());
         loadbalanceText.setSelectedItem(sample.getLoadbalance());
         asyncText.setSelectedItem(sample.getAsync());
         clusterText.setText(sample.getCluster());
@@ -400,6 +411,7 @@ public class DubboSampleGui extends AbstractSamplerGui {
         sample.setRetries(retriesText.getText());
         sample.setGroup(groupText.getText());
         sample.setConnections(connectionsText.getText());
+        sample.setRouterGroup(routerGroupText.getText());
         sample.setLoadbalance(loadbalanceText.getSelectedItem().toString());
         sample.setAsync(asyncText.getSelectedItem().toString());
         sample.setCluster(clusterText.getText());
@@ -459,6 +471,7 @@ public class DubboSampleGui extends AbstractSamplerGui {
         clusterText.setText(DubboSample.DEFAULT_CLUSTER);
         groupText.setText("");
         connectionsText.setText(DubboSample.DEFAULT_CONNECTIONS);
+        routerGroupText.setText(DubboSample.DEFAULT_ROUTER_GROUP);
         loadbalanceText.setSelectedIndex(0);
         asyncText.setSelectedIndex(0);
         interfaceText.setText("");
